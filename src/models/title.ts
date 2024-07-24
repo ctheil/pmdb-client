@@ -54,3 +54,53 @@ export class Title {
     this.backdrop_path = title.backdrop_path
   }
 }
+
+export type Video = {
+  name: string
+  key: string
+  site: string
+  size: number
+  official: boolean
+  published_at: string
+  id: string
+}
+export type Videos = {
+  id: number
+  results: Video[]
+}
+
+export type TitleDetails = {
+  adult: boolean
+  backdrop_path: string
+  belongs_to_collection: {
+    id: number
+    name: string
+    poster_path: string
+    backdrop_path: string
+  }
+  budget: number
+  genres: {
+    id: number
+    name: string
+  }[]
+  homepage: string
+  id: number
+  imdb_id: string
+  origin_country: string
+  original_title: string
+  overview: string
+  popularity: string
+  poster_path: string
+  production_companies: {
+    id: string
+    logo_path: string
+    origin_country: string
+  }[]
+  release_date: string
+  runtime: number
+  status: string
+  vote_average: number
+  vote_count: number
+  videos: Videos
+}
+

@@ -3,6 +3,7 @@ import { Title } from "../../models/title";
 import TitleCard from "../TitleCard/TitleCard";
 import { PMDB, PMDBError } from "../../api/pmdb-api";
 import Spinner from "../Loading/Spinner";
+import FSTitle from "../FSTitle/FSTitle";
 
 export default function CardStack() {
   const [data, setData] = useState<Title[] | null>(null)
@@ -27,8 +28,6 @@ export default function CardStack() {
     getData()
   }, [])
 
-  console.log(data)
-
 
   if (loading) {
     return <Spinner />
@@ -39,9 +38,9 @@ export default function CardStack() {
   }
 
 
-  return <div className="flex flex-wrap gap-2 items-center justify-center w-full h-full">
-    {/* {data.map((title) => <TitleCard key={title.id} title={title} />)} */}
-    <TitleCard title={data[0]} />
+  return <div className="w-full h-full grid">
+    {data.map((title) => <TitleCard key={title.id} title={title} />)}
+    {/* <FSTitle title={data[0]} /> */}
     {/* <TitleCard title={data[1]} /> */}
   </div>
 }

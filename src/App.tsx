@@ -8,8 +8,8 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme='system' storageKey='vite-ui-theme'>
-      <main className='flex flex-col h-screen overflow-hidden'>
-        <Logo />
+      <main className='flex flex-col overflow-hidden'>
+        {/* <Logo /> */}
         <CardStack />
       </main>
     </ThemeProvider>
