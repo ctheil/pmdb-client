@@ -1,8 +1,8 @@
-import { Video } from "@/models/title";
 import { useEffect, useState } from "react";
 import { DrawerTitle } from "../../ui/drawer";
 import { Button } from "../../ui/button";
 import { FaPlay } from "react-icons/fa";
+import { Video } from "@/models/title.video";
 
 type Props = {
   videos: Video[]
@@ -40,11 +40,10 @@ export default function Videos({ videos, updateVideo }: Props) {
   }, [])
 
   return (
-    <div className="w-full pt-4">
+    <div className="">
       <DrawerTitle className="text-sm">Additional Videos: {getNumVids(vidButtons)}</DrawerTitle>
       <div className="pt-4 w-full flex flex-wrap gap-2">
         {Object.keys(vidButtons).map(key => {
-          console.log(vidButtons[key].length)
           return <Button
             key={key}
             disabled={vidButtons[key].length < 1}

@@ -4,7 +4,6 @@ import { Card } from "../ui/card";
 import { motion } from "framer-motion";
 import { FaInfoCircle } from "react-icons/fa";
 import TitleDrawer from "../TitleDrawer/TitleDrawer";
-import { UserPrefsProvider } from "@/lib/UserContext";
 type Props = {
   title: Title | undefined
   swipe: "left" | "right" | "up" | null
@@ -22,7 +21,6 @@ const TitleCard = ({ title, swipe }: Props) => {
 
   if (!title) return;
 
-  console.log(title.id)
   return (
 
     <motion.div
@@ -50,9 +48,7 @@ const TitleCard = ({ title, swipe }: Props) => {
         </div>
       </Card>
       {selected &&
-        <UserPrefsProvider>
-          <TitleDrawer title={title} open={selected} handleClose={() => setSelected(false)} />
-        </UserPrefsProvider>
+        <TitleDrawer title={title} open={selected} setOpen={setSelected} handleClose={() => setSelected(false)} />
       }
     </motion.div>
   )

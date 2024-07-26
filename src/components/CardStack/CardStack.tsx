@@ -73,7 +73,6 @@ export default function CardStack() {
 
   useEffect(() => {
     async function getData() {
-      console.log("getting data...")
       dispatch({ type: "SET_LOADING", payload: true })
       const pmdb = new PMDB()
       const data = await pmdb.getTrendingTitles(true, 5, "movie")
@@ -95,17 +94,11 @@ export default function CardStack() {
       case "DISLIKE": direction = "right"; break
       case "ENLIST": direction = "up"; break
     }
-    console.log("[handleUpdateState]: dispatch direction: ", direction)
     dispatch({ type: "SET_DIRECTION", payload: direction })
     setTimeout(() => {
-      console.log("[handleUpdateState]: dispatch method: ", method)
-      // dispatch({ type: "SET_DIRECTION", payload: null })
       dispatch({ type: method })
     }, 500)
-    var titlesLeft = cardStack?.queue.length;
-    // if (titlesLeft && titlesLeft < 5) // FETCH MORE DATA VIA ALGO BASED ON LIKED TITLES! {
-
-    // }
+    // var titlesLeft = cardStack?.queue.length;
   }
 
   if (cardStack && cardStack?.queue.length < 1) {
@@ -128,11 +121,6 @@ export default function CardStack() {
     }
     return <p className="text-red-500 text-xl">{message}</p>
   }
-
-  console.log("curr: ", cardStack.peek()?.title)
-  console.log("next: ", cardStack.peek_next()?.title)
-  //
-  // // var next = cardStack.peek_next()
 
 
   return <div className="w-full h-full grid">

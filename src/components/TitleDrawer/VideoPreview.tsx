@@ -5,7 +5,7 @@ type Props = {
   embed_id: string
   handleSetVidState: (state: "loading" | "playing" | "finished") => void
   muted: boolean
-  fullscreen: boolean
+  fullscreen: string
   autoplay: boolean
 }
 export function YoutubePreview({ embed_id, handleSetVidState, muted, fullscreen, autoplay }: Props) {

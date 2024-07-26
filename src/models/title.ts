@@ -1,3 +1,7 @@
+import { Credits } from "./title.credit";
+import { WatchProviders } from "./title.provider";
+import { Videos } from "./title.video";
+
 export type TitleRes = {
   type: string;
   id: number
@@ -55,30 +59,7 @@ export class Title {
   }
 }
 
-export type Video = {
-  name: string
-  key: string
-  site: string
-  size: number
-  official: boolean
-  published_at: string
-  id: string
-  type: string
-}
-export type Videos = {
-  id: number
-  results: Video[]
-}
 
-export type Credit = {
-  character: string
-  known_for_department: string
-  name: string
-  profile_path: string
-}
-export type Credits = {
-  cast: Credit[]
-}
 
 export type TitleDetails = {
   adult: boolean
@@ -114,5 +95,6 @@ export type TitleDetails = {
   vote_count: number
   videos: Videos
   credits: Credits
+  "watch/providers": WatchProviders
 }
 

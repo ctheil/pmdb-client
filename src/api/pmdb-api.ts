@@ -47,7 +47,7 @@ export class PMDB {
 
   async getDetailsById(id: number, name: string): Promise<TitleDetails | PMDBError> {
     try {
-      const res = await axios.get(this.baseUrl + `/titles/details/${id}`)
+      const res = await axios.get(this.baseUrl + `/titles/details/${id}?include=cvp`)
       const result: TitleDetails = res.data.results;
       // const titles = results.map(t => new Title(t))
       return result;

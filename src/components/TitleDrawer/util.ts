@@ -1,5 +1,5 @@
 import { VideoMediaTypeOrder } from "@/lib/UserContext"
-import { Video } from "@/models/title"
+import { Video } from "@/models/title.video"
 
 type VMedia = {
   primary: Video[]
