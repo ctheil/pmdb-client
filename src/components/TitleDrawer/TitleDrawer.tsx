@@ -1,13 +1,14 @@
-import { Title, TitleDetails } from "@/models/title"
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "../ui/drawer"
+import { Title, TitleDetails, Video } from "@/models/title"
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "../ui/drawer"
 import { useEffect, useState } from "react"
-import { Loader2 } from "lucide-react"
 import { PMDB, PMDBError } from "@/api/pmdb-api"
-import ErrorStack from "../Error/ErrorSnack"
 import ErrorSnack from "../Error/ErrorSnack"
-import { FaThumbsUp } from "react-icons/fa"
 import Hero from "./Hero"
 import { Badge } from "../ui/badge"
+import { Button } from "../ui/button"
+import { getVideos } from "./util"
+import { useUserPreferences } from "@/lib/UserContext"
+import AdditionalContent from "./AdditionalContent"
 
 type Props = {
   title: Title
@@ -16,9 +17,12 @@ type Props = {
 }
 export default function TitleDrawer({ title, open, handleClose }: Props) {
   const [data, setData] = useState<null | TitleDetails>(null)
-  const [video, setVideo] = useState<null | string>(null)
+  const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<null | PMDBError>(null)
+  const [currVid, setCurrVid] = useState<null | string>(null)
+  const { userPrefs } = useUserPreferences()
+
 
   useEffect(() => {
     async function getData() {
@@ -30,45 +34,56 @@ export default function TitleDrawer({ title, open, handleClose }: Props) {
         setError(_data)
       } else {
         setData(_data)
-        let vid_key = ""
-        console.log("found videos...", _data.videos)
-        for (let video of _data.videos.results) {
-          console.log("vid ", video.site)
-          if (video.site === "YouTube") {
-
-            setVideo(video.key)
-            break;
-          }
-        }
-
+        console.log(_data)
+        var videos = getVideos(_data.videos.results, userPrefs.videoMediaTypePrefOrder)
+        setVideos(videos)
+        setCurrVid(videos[0]?.key || null)
       }
       setLoading(false)
     }
     getData()
   }, [])
 
-  console.log(data)
+  function updateVideo(key: string) {
+    setCurrVid(key)
+  }
 
 
-  var release_date = new Date(title.release_date)
+
 
   return <Drawer open={open} onClose={handleClose}>
-    <DrawerContent className="overflow-hidden">
-      <Hero title={title} data={data} year={release_date.getFullYear() + ""} video_embed_id={video} loading={loading} />
+    <DrawerContent className="overflow-hidden bg-black">
+      <Hero title={title} data={data} year={new Date(title.release_date).getFullYear() + ""} loading={loading} video_key={currVid} />
       <DrawerHeader className="relative flex flex-col text-start">
-        {data &&
+        {data ?
           <div className="flex gap-1 ml-[-5px] mb-2">
             {
-              data.genres.map(genre => <Badge variant="secondary">{genre.name}</Badge>)
+              data.genres.map(genre => <Badge key={genre.id} variant="secondary">{genre.name}</Badge>)
             }
+          </div>
+          :
+          <div className="flex gap-1 ml-[-5px] mb-2">
+            <Badge variant="secondary" className="pr-12">&nbsp;</Badge>
+            <Badge variant="secondary" className="pr-20">&nbsp;</Badge>
+            <Badge variant="secondary" className="pr-12">&nbsp;</Badge>
           </div>
         }
         <DrawerTitle className="text-sm">Description</DrawerTitle>
         <DrawerDescription>{title.overview}</DrawerDescription>
+        <AdditionalContent videos={videos} updateVideo={updateVideo} cast={data?.credits.cast || null} />
       </DrawerHeader>
-      <div className="p-2">
-        {error && <ErrorSnack error={error} />}
-      </div>
+      <DrawerFooter>
+        {/* <DrawerClose asChild> */}
+        <div className="flex gap-3 w-full">
+          <Button className="w-full">Want to see it</Button>
+          <Button variant="outline" className="w-full">Seen it</Button>
+        </div>
+        <Button onClick={handleClose} variant="outline" className="bg-black">Close</Button>
+        {/* </DrawerClose> */}
+        <div className="p-2">
+          {error && <ErrorSnack error={error} />}
+        </div>
+      </DrawerFooter>
     </DrawerContent>
   </Drawer>
 

@@ -63,10 +63,21 @@ export type Video = {
   official: boolean
   published_at: string
   id: string
+  type: string
 }
 export type Videos = {
   id: number
   results: Video[]
+}
+
+export type Credit = {
+  character: string
+  known_for_department: string
+  name: string
+  profile_path: string
+}
+export type Credits = {
+  cast: Credit[]
 }
 
 export type TitleDetails = {
@@ -102,5 +113,6 @@ export type TitleDetails = {
   vote_average: number
   vote_count: number
   videos: Videos
+  credits: Credits
 }
 

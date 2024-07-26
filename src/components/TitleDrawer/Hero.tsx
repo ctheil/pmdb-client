@@ -1,24 +1,31 @@
 import { Title, TitleDetails } from "@/models/title"
 import { Loader2 } from "lucide-react"
 import { DrawerDescription, DrawerTitle } from "../ui/drawer"
-import { FaClock, FaThumbsUp } from "react-icons/fa"
-import { useEffect, useState } from "react"
+import { FaClock, FaPlay, FaThumbsUp } from "react-icons/fa"
+import { useState } from "react"
 import { YoutubePreview } from "./VideoPreview"
 import { motion, AnimatePresence } from "framer-motion"
 import { IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io"
+import { useUserPreferences } from "@/lib/UserContext"
 
 type Props = {
   title: Title
   loading: boolean
-  video_embed_id: null | string
   year: string
   data: TitleDetails | null
+  video_key: string | null
 }
 
-type VideoState = "loading" | "playing" | "finished"
-export default function Hero({ title, loading, video_embed_id, year, data }: Props) {
-  const [vidState, setVidState] = useState<VideoState>("loading")
-  const [playback, setPlayback] = useState({ muted: true })
+
+type VideoState = "loading" | "playing" | "finished" | "paused"
+export default function Hero({ title, year, data, video_key }: Props) {
+  const [fullscreen, _] = useState(false);
+  // const [media, setMedia] = useState<Video[]>([])
+  const { userPrefs } = useUserPreferences()
+  const [vidState, setVidState] = useState<VideoState>(userPrefs.videoAutoplay ? "loading" : "paused")
+  const [playback, setPlayback] = useState({ muted: userPrefs.videoDefaultMuted })
+
+  // useEffect(() => {})
 
   function handleSetVidState(state: VideoState) {
     setVidState(state)
@@ -28,23 +35,30 @@ export default function Hero({ title, loading, video_embed_id, year, data }: Pro
     setPlayback({ muted: muted })
   }
 
+
   return (
     <div className="grid">
       <div className="row-start-1 col-start-1 shadow-red-500">
         {vidState !== "playing" &&
-          <img src={title.backdrop_path} className="mt-[-1.5rem] row-start-1 col-start-1" />
+          <div className="mt-[-1.5rem] row-start-1 col-start-1 grid">
+            <img src={title.backdrop_path} className="w-full h-full max-h-[194.25px] row-start-1 col-start-1" />
+            {video_key &&
+              <div className="row-start-1 col-start-1 w-full h-full flex items-center justify-center bg-black/30">
+                {!userPrefs.videoAutoplay && vidState === "paused" ?
+                  <FaPlay onClick={() => setVidState("loading")} size={30} className="shadow-inner" />
+                  :
+                  <Loader2 className="h-w w-4 animate-spin font-black" />
+                }
+              </div>
+            }
+          </div>
         }
-        {vidState !== "finished" && video_embed_id &&
-          <YoutubePreview muted={playback.muted} handleSetVidState={handleSetVidState} embed_id={video_embed_id} />
+        {vidState !== "finished" && video_key &&
+          <YoutubePreview muted={playback.muted} handleSetVidState={handleSetVidState} embed_id={video_key} fullscreen={fullscreen} autoplay={!userPrefs.videoAutoplay ? vidState !== "paused" : true} />
         }
       </div>
-      {loading || vidState === "loading" &&
-        <div className="flex w-full h-full items-center justify-center bg-black/30 mt-[-1.5rem] row-start-1 col-start-1">
-          <Loader2 className="h-w w-4 animate-spin font-black" />
-        </div>
-      }
       <div
-        className="row-start-1 col-start-1 mt-auto bg-gradient-to-t from-slate-950 to-slate-950/0 pl-4 pr-4 z-10 pt-10">
+        className="row-start-1 col-start-1 mt-auto bg-gradient-to-t from-black to-black/0 pl-4 pr-4 z-10 pt-10">
         <AnimatePresence>
           <motion.div
             key={1}
@@ -64,7 +78,13 @@ export default function Hero({ title, loading, video_embed_id, year, data }: Pro
                 }
               </motion.div>
             }
-            <DrawerTitle className="">{title.title}</DrawerTitle>
+            <DrawerTitle className="text-ellipsis overflow-hidden whitespace-nowrap">{title.title}</DrawerTitle>
+            {/* {vidState === "playing" && */}
+            {/*   <MdFullscreen className="size-6 text-muted-foreground ml-auto" onClick={() => { */}
+            {/*     setFullscreen(!fullscreen) */}
+            {/*   } */}
+            {/*   } /> */}
+            {/* } */}
           </motion.div>
           {vidState !== "playing" &&
             <motion.div

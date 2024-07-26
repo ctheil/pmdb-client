@@ -1,5 +1,5 @@
 import { Title } from "@/models/title"
-import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { motion } from "framer-motion"
 
 type Props = {

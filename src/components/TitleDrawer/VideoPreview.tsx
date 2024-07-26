@@ -1,14 +1,14 @@
 import { useState } from "react"
-import { FaVolumeMute } from "react-icons/fa"
-import { IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io"
 import ReactPlayer from "react-player"
 
 type Props = {
   embed_id: string
   handleSetVidState: (state: "loading" | "playing" | "finished") => void
   muted: boolean
+  fullscreen: boolean
+  autoplay: boolean
 }
-export function YoutubePreview({ embed_id, handleSetVidState, muted }: Props) {
+export function YoutubePreview({ embed_id, handleSetVidState, muted, fullscreen, autoplay }: Props) {
   const [ready, setReady] = useState(false)
 
 
@@ -31,12 +31,13 @@ export function YoutubePreview({ embed_id, handleSetVidState, muted }: Props) {
         // controls={false}
         volume={50}
         muted={muted}
-        playing={true}
+        playing={autoplay}
         onPlay={() => {
           handleSetVidState("playing")
           setReady(true)
         }}
         onEnded={() => handleSetVidState("finished")}
+        fullscreen={fullscreen}
 
       />
 
