@@ -1,23 +1,20 @@
 import './App.css'
-import Login from './components/Auth/Login'
-import CardStack from './components/CardStack/CardStack'
 import { ThemeProvider } from './components/ThemeProvider'
-import useAuth from './hooks/useAuth'
 import { UserPrefsProvider } from './lib/UserContext'
+import { RouterProvider } from 'react-router-dom'
+import router from './components/Home'
+import axios from 'axios'
 
 
+axios.defaults.withCredentials = true
 function App() {
-  const { user } = useAuth()
+
 
   return (
     <ThemeProvider defaultTheme='system' storageKey='vite-ui-theme'>
       <UserPrefsProvider>
         <main className='flex flex-col overflow-hidden overflow-x-hidden overflow-y-hidden'>
-          {!user ?
-            <Login />
-            :
-            <CardStack />
-          }
+          <RouterProvider router={router} />
         </main>
       </UserPrefsProvider>
     </ThemeProvider>

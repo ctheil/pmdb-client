@@ -27,8 +27,8 @@ export class PMDB {
   version: string
   constructor() {
     this.version = "v1"
-    // this.baseUrl = `http://localhost:8080/${this.version}`
-    this.baseUrl = `http://10.0.0.218:8080/${this.version}`
+    this.baseUrl = `http://localhost:8080/${this.version}`
+    // this.baseUrl = `http://10.0.0.218:8080/${this.version}`
 
   }
 
@@ -86,20 +86,18 @@ export class PMDB {
     }
 
   }
-  async login(email: string, password: string): Promise<boolean | PMDBError> {
-    try {
-      const res = await axios.post(this.baseUrl + `/auth/login/`, {
-        email, password
-      },
-      )
-      return res.status === 200
-    } catch (_err) {
-      const err = _err as AxiosError
-      console.error("[getUser]: error: ", err.message)
-      return new PMDBError(err, `Error getting user`)
-    }
-
-
-  }
+  // async login(email: string, password: string): Promise<boolean | PMDBError> {
+  //   try {
+  //     const res = await axios.post(this.baseUrl + `/auth/login/`, {
+  //       email, password
+  //     },
+  //     )
+  //     return res.status === 200
+  //   } catch (_err) {
+  //     const err = _err as AxiosError
+  //     console.error("[getUser]: error: ", err.message)
+  //     return new PMDBError(err, `Error getting user`)
+  //   }
+  // }
 
 }
